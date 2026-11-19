@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public final class ApiDtos {
+
     private ApiDtos() {
     }
 

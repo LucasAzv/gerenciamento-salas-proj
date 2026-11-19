@@ -22,7 +22,12 @@ public class CadastroService {
     @Transactional
     public ProfessorView cadastrar(ProfessorCreate dto) {
         String cpf = dto.cpf().replaceAll("[^0-9]", "");
-        if (!cpfValido(cpf)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CPF inválido");
+        if (cpf.length() != 11) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "O CPF deve conter 11 dígitos"
+            );
+        }
 
         if (dto.senha().length() < 8)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha deve ter ao menos 8 caracteres");
@@ -38,20 +43,5 @@ public class CadastroService {
         return ProfessorView.of(professor);
     }
 
-    private boolean cpfValido(String cpf) {
-        if (cpf.length() != 11 || cpf.chars().distinct().count() == 1) return false;
 
-        for (int etapa = 9; etapa <= 10; etapa++) {
-            int soma = 0;
-
-            for (int i = 0; i < etapa; i++) soma += (cpf.charAt(i) - '0') * (etapa + 1 - i);
-
-            int digito = (soma * 10) % 11;
-
-            if (digito == 10) digito = 0;
-
-            if (digito != cpf.charAt(etapa) - '0') return false;
-        }
-        return true;
-    }
 }

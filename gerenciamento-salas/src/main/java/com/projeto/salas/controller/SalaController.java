@@ -13,6 +13,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/salas")
 public class SalaController {
+
     private final SalaService salas;
 
 

@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "requisicoes", indexes = {@Index(name = "idx_reserva_sala_data", columnList = "sala_id,data,status")})
 public class Requisicao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

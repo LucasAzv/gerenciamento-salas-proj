@@ -25,22 +25,82 @@ public class RequisicaoService {
     @PersistenceContext
     private EntityManager entityManager;
 
-
     @Transactional
     public RequisicaoView solicitar(String login, RequisicaoInput dto) {
-        SalaService.validarHorario(dto.data(), dto.horaInicio(), dto.horaFim());
-        var professor = professores.findByUsuarioLogin(login).orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Professor não associado ao usuário"));
 
-        var sala = salas.findSalaById(dto.salaId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sala não encontrada"));
+        SalaService.validarHorario(
+                dto.data(),
+                dto.horaInicio(),
+                dto.horaFim()
+        );
 
-        if (!sala.isDisponivel())
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Sala bloqueada pelo administrador");
+        var professor = professores.findByUsuarioLogin(login)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.FORBIDDEN,
+                        "Professor não associado ao usuário"
+                ));
 
-        if (requisicoes.existeConflito(sala.getId(), dto.data(), dto.horaInicio(), dto.horaFim(), StatusRequisicao.APROVADA, -1L))
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Sala já reservada nesse horário");
+        var sala = salas.findSalaById(dto.salaId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Sala não encontrada"
+                ));
 
-        return RequisicaoView.of(requisicoes.save(new Requisicao(professor, sala, dto.data(), dto.horaInicio(), dto.horaFim())));
+        if (!sala.isDisponivel()) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Sala bloqueada pelo administrador"
+            );
+        }
+
+        boolean duplicada = requisicoes.existeSolicitacaoDuplicada(
+                professor.getId(),
+                sala.getId(),
+                dto.data(),
+                dto.horaInicio(),
+                dto.horaFim(),
+                List.of(
+                        StatusRequisicao.PENDENTE,
+                        StatusRequisicao.APROVADA
+                )
+        );
+
+        if (duplicada) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Você já possui uma solicitação ativa para esta sala nesse horário."
+            );
+        }
+
+        boolean ocupada = requisicoes.existeConflito(
+                sala.getId(),
+                dto.data(),
+                dto.horaInicio(),
+                dto.horaFim(),
+                StatusRequisicao.APROVADA,
+                -1L
+        );
+
+        if (ocupada) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Esta sala já está ocupada no horário solicitado."
+            );
+        }
+
+        Requisicao requisicao = new Requisicao(
+                professor,
+                sala,
+                dto.data(),
+                dto.horaInicio(),
+                dto.horaFim()
+        );
+
+        return RequisicaoView.of(
+                requisicoes.save(requisicao)
+        );
     }
+
 
     @Transactional
     public RequisicaoView aprovar(Long id) {
@@ -59,7 +119,7 @@ public class RequisicaoService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Sala bloqueada pelo administrador");
 
         if (requisicoes.existeConflito(sala.getId(), r.getData(), r.getHoraInicio(), r.getHoraFim(), StatusRequisicao.APROVADA, r.getId()))
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe reserva aprovada conflitante");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Esta sala já está ocupada no horário solicitado.");
         r.setStatus(StatusRequisicao.APROVADA);
 
         return RequisicaoView.of(r);

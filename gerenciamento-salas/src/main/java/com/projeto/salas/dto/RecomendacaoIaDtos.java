@@ -15,7 +15,7 @@ public final class RecomendacaoIaDtos {
     private RecomendacaoIaDtos() {
     }
 
-    // Dados informados pelo professor
+
     public record Pedido(
             @NotNull
             @FutureOrPresent
@@ -32,7 +32,7 @@ public final class RecomendacaoIaDtos {
     ) {
     }
 
-    // Sala recomendada pela IA
+
     public record SalaRecomendada(
             Long salaId,
             TipoSala tipoSala,
@@ -42,7 +42,7 @@ public final class RecomendacaoIaDtos {
     ) {
     }
 
-    // Resposta enviada ao professor
+
     public record Resultado(
             String disciplina,
             TipoSala tipoSolicitado,
@@ -51,7 +51,7 @@ public final class RecomendacaoIaDtos {
     ) {
     }
 
-    // Formato da resposta do modelo de IA
+
     public record RespostaModelo(
             List<ItemModelo> recomendacoes
     ) {

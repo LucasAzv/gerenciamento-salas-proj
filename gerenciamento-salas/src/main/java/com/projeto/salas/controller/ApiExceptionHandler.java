@@ -9,6 +9,7 @@ import java.util.*;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> invalid(MethodArgumentNotValidException ex) {
         return ResponseEntity.badRequest().body(Map.of("erro", "Dados inválidos", "campos", ex.getBindingResult().getFieldErrors().stream().map(e -> e.getField() + ": " + e.getDefaultMessage()).toList()));

@@ -3,12 +3,12 @@ package com.projeto.salas.model;
 import com.projeto.salas.enums.TipoAula;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "professores")
 public class Professor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

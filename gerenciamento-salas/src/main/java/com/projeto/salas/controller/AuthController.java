@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
+
 public class AuthController {
     private final AuthenticationManager authentication;
     private final UsuarioRepository usuarios;

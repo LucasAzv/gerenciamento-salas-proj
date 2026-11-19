@@ -86,7 +86,7 @@ public class RecomendacaoIaService {
 
             throw new ResponseStatusException(
                     HttpStatus.SERVICE_UNAVAILABLE,
-                    "Integração de IA não configurada: defina GROQ_API_KEY"
+                    "Integração de IA não configurada: Defina API_KEY"
             );
         }
 

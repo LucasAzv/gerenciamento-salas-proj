@@ -16,6 +16,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/requisicoes")
 public class RequisicaoController {
+
     private final RequisicaoService requisicoes;
 
 
