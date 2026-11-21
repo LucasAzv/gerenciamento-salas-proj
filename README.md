@@ -85,6 +85,6 @@ VALUES
 //////////// Login do primeiro admin ////////////
 Name: ADMIN_LOGIN Value: admin
 
-Name: ADMIN_PASSWORD Value: AdminTeste123
+Name: ADMIN_PASSWORD Value: AdminTeste123!
 
 
