@@ -87,8 +87,4 @@ Name: ADMIN_LOGIN Value: admin
 
 Name: ADMIN_PASSWORD Value: AdminTeste123
 
-//////////// API GROQ ////////////
-
-Name: GROQ_API_KEY Value: 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
-
 
