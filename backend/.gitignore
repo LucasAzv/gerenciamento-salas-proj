@@ -1,0 +1,9 @@
+# Saída de build do Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Arquivos locais
+.env
+*.iml
+*.iws
+*.ipr
