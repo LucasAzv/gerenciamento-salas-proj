@@ -1,0 +1,80 @@
+<h2>Salas</h2>
+<p class="sutil">Escolha a data e o horário para ver quais salas estão livres.</p>
+
+<form class="cartao filtros" (ngSubmit)="consultar()">
+  <label>
+    Data
+    <input type="date" name="data" [(ngModel)]="data" [min]="hoje">
+  </label>
+  <label>
+    Início
+    <input type="time" name="inicio" [(ngModel)]="inicio">
+  </label>
+  <label>
+    Fim
+    <input type="time" name="fim" [(ngModel)]="fim">
+  </label>
+  <button class="btn" type="submit" [disabled]="carregando">
+    {{ carregando ? 'Consultando...' : 'Consultar' }}
+  </button>
+</form>
+
+@if (erro) {
+  <p class="msg erro">{{ erro }}</p>
+}
+@if (aviso) {
+  <p class="msg ok">{{ aviso }} <a routerLink="/reservas">Ver minhas reservas</a></p>
+}
+
+@if (busca; as b) {
+  <div class="cartao">
+    <p class="sutil">{{ b.data | dataBr }}, das {{ b.inicio }} às {{ b.fim }}</p>
+
+    <div class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Sala</th>
+            <th>Tipo</th>
+            <th>Capacidade</th>
+            <th>Situação</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of b.salas; track item.sala.id) {
+            <tr>
+              <td>Sala {{ item.sala.id }}</td>
+              <td>{{ item.sala.tipoSala | tipoSala }}</td>
+              <td>{{ item.sala.tamanho }} lugares</td>
+              <td>
+                @if (item.livreNoHorario) {
+                  <span class="etiqueta livre">Livre</span>
+                } @else if (!item.sala.disponivel) {
+                  <span class="etiqueta">Bloqueada</span>
+                } @else {
+                  <span class="etiqueta ocupada">Ocupada</span>
+                }
+              </td>
+              <td class="acoes">
+                @if (solicitadas.has(item.sala.id)) {
+                  <span class="sutil">Pedido enviado</span>
+                } @else if (item.livreNoHorario) {
+                  <button
+                    type="button"
+                    class="btn-sec btn-peq"
+                    [disabled]="enviandoId !== null"
+                    (click)="solicitar(item.sala, b)">
+                    {{ enviandoId === item.sala.id ? 'Enviando...' : 'Solicitar' }}
+                  </button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="vazio">Nenhuma sala cadastrada.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+}

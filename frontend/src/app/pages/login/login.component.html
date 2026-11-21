@@ -1,0 +1,24 @@
+<div class="login-pagina">
+  <form class="cartao login-cartao" (ngSubmit)="entrar()">
+    <h1>Reserva de Salas</h1>
+    <p class="sutil">Entre com seu usuário e senha.</p>
+
+    @if (erro) {
+      <p class="msg erro">{{ erro }}</p>
+    }
+
+    <label>
+      Login
+      <input name="login" [(ngModel)]="login" autocomplete="username" autofocus>
+    </label>
+
+    <label>
+      Senha
+      <input name="senha" type="password" [(ngModel)]="senha" autocomplete="current-password">
+    </label>
+
+    <button class="btn" type="submit" [disabled]="enviando">
+      {{ enviando ? 'Entrando...' : 'Entrar' }}
+    </button>
+  </form>
+</div>

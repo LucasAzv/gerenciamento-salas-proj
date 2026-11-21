@@ -1,0 +1,21 @@
+<header class="topo">
+  <div class="topo-conteudo">
+    <span class="marca">Reserva de Salas</span>
+
+    <nav>
+      @if (auth.role() === 'PROFESSOR') {
+        <a routerLink="/salas" routerLinkActive="ativo">Salas</a>
+        <a routerLink="/reservas" routerLinkActive="ativo">Minhas reservas</a>
+      }
+    </nav>
+
+    <div class="usuario">
+      <span>{{ auth.login() }}</span>
+      <button type="button" class="btn-link" (click)="sair()">Sair</button>
+    </div>
+  </div>
+</header>
+
+<main class="conteudo">
+  <router-outlet />
+</main>
