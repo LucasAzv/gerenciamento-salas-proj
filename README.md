@@ -79,3 +79,16 @@ VALUES
     (25, 'PRATICA', FALSE),
     (50, 'TEORICA', TRUE),
     (35, 'PRATICA', TRUE);
+
+
+
+//////////// Login do primeiro admin ////////////
+Name: ADMIN_LOGIN Value: admin
+
+Name: ADMIN_PASSWORD Value: AdminTeste123
+
+//////////// API GROQ ////////////
+
+Name: GROQ_API_KEY Value: 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
+
+
