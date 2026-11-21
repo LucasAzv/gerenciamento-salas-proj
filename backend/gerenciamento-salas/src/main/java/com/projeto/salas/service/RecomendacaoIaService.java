@@ -171,7 +171,7 @@ public class RecomendacaoIaService {
 
         } catch (Exception e) {
 
-            // Exibe o erro completo no console do IntelliJ
+            // Análise via console
             e.printStackTrace();
 
             throw new ResponseStatusException(
