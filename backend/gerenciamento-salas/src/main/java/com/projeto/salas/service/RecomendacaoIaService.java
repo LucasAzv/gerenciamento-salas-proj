@@ -118,7 +118,7 @@ public class RecomendacaoIaService {
                     .append('\n');
         }
 
-        // 7. Solicitar recomendação ao Gemini
+        // 7. Solicitar recomendação
         RespostaModelo resposta;
 
         try {
