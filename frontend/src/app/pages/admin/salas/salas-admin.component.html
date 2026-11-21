@@ -1,0 +1,74 @@
+<h2>Gerenciar salas</h2>
+<p class="sutil">Cadastre, edite ou bloqueie salas. Salas com histórico de pedidos não podem ser excluídas, só bloqueadas.</p>
+
+<form class="cartao filtros" (ngSubmit)="salvar()">
+  <label>
+    Capacidade
+    <input type="number" name="tamanho" min="1" [(ngModel)]="tamanho" placeholder="Ex.: 40">
+  </label>
+  <label>
+    Tipo
+    <select name="tipoSala" [(ngModel)]="tipoSala">
+      <option value="TEORICA">Teórica</option>
+      <option value="PRATICA">Prática</option>
+    </select>
+  </label>
+  <button class="btn" type="submit" [disabled]="salvando">
+    {{ editandoId ? 'Salvar sala ' + editandoId : 'Adicionar sala' }}
+  </button>
+  @if (editandoId) {
+    <button class="btn-sec" type="button" (click)="limparFormulario()">Cancelar</button>
+  }
+</form>
+
+@if (erro) {
+  <p class="msg erro">{{ erro }}</p>
+}
+@if (aviso) {
+  <p class="msg ok">{{ aviso }}</p>
+}
+
+<div class="cartao">
+  @if (carregando) {
+    <p class="sutil">Carregando...</p>
+  } @else {
+    <div class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Sala</th>
+            <th>Tipo</th>
+            <th>Capacidade</th>
+            <th>Situação</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of salas; track s.id) {
+            <tr>
+              <td>Sala {{ s.id }}</td>
+              <td>{{ s.tipoSala | tipoSala }}</td>
+              <td>{{ s.tamanho }} lugares</td>
+              <td>
+                @if (s.disponivel) {
+                  <span class="etiqueta disponivel">Disponível</span>
+                } @else {
+                  <span class="etiqueta">Bloqueada</span>
+                }
+              </td>
+              <td class="acoes">
+                <button type="button" class="btn-link" (click)="editar(s)">Editar</button>
+                <button type="button" class="btn-link" (click)="alternarDisponibilidade(s)">
+                  {{ s.disponivel ? 'Bloquear' : 'Liberar' }}
+                </button>
+                <button type="button" class="btn-link perigo" (click)="excluir(s)">Excluir</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="vazio">Nenhuma sala cadastrada.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

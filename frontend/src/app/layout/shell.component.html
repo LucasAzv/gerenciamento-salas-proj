@@ -5,7 +5,13 @@
     <nav>
       @if (auth.role() === 'PROFESSOR') {
         <a routerLink="/salas" routerLinkActive="ativo">Salas</a>
+        <a routerLink="/recomendacao" routerLinkActive="ativo">Sugestão de sala</a>
         <a routerLink="/reservas" routerLinkActive="ativo">Minhas reservas</a>
+      }
+      @if (auth.role() === 'ADMIN') {
+        <a routerLink="/admin/requisicoes" routerLinkActive="ativo">Pedidos</a>
+        <a routerLink="/admin/salas" routerLinkActive="ativo">Salas</a>
+        <a routerLink="/admin/professores" routerLinkActive="ativo">Professores</a>
       }
     </nav>
 

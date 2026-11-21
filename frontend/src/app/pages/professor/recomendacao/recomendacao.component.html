@@ -1,0 +1,84 @@
+<h2>Sugestão de sala</h2>
+<p class="sutil">Informe o horário e, se quiser, a quantidade de alunos. O sistema sugere as salas mais adequadas para a sua disciplina.</p>
+
+<form class="cartao filtros" (ngSubmit)="buscar()">
+  <label>
+    Data
+    <input type="date" name="data" [(ngModel)]="data" [min]="hoje">
+  </label>
+  <label>
+    Início
+    <input type="time" name="inicio" [(ngModel)]="inicio">
+  </label>
+  <label>
+    Fim
+    <input type="time" name="fim" [(ngModel)]="fim">
+  </label>
+  <label>
+    Alunos (opcional)
+    <input type="number" name="alunos" min="1" [(ngModel)]="alunos" style="width: 130px">
+  </label>
+  <button class="btn" type="submit" [disabled]="carregando">
+    {{ carregando ? 'Buscando...' : 'Buscar sugestões' }}
+  </button>
+</form>
+
+@if (carregando) {
+  <p class="sutil">Analisando as salas disponíveis, isso pode levar alguns segundos.</p>
+}
+@if (erro) {
+  <p class="msg erro">{{ erro }}</p>
+}
+@if (aviso) {
+  <p class="msg ok">{{ aviso }} <a routerLink="/reservas">Ver minhas reservas</a></p>
+}
+
+@if (consulta; as c) {
+  <div class="cartao">
+    <p class="sutil">
+      {{ c.resultado.disciplina }} · aula {{ c.resultado.tipoSolicitado | tipoSala }} ·
+      {{ c.data | dataBr }}, das {{ c.inicio }} às {{ c.fim }}
+    </p>
+
+    @if (c.resultado.recomendacoes.length === 0) {
+      <p>Nenhuma sala compatível está livre nesse horário. Tente outro horário ou reduza a quantidade de alunos.</p>
+    } @else {
+      <div class="tabela">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Sala</th>
+              <th>Capacidade</th>
+              <th>Por quê</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of c.resultado.recomendacoes; track item.salaId) {
+              <tr>
+                <td>{{ item.posicao }}º</td>
+                <td>Sala {{ item.salaId }}</td>
+                <td>{{ item.capacidade }} lugares</td>
+                <td class="quebra">{{ item.justificativa }}</td>
+                <td class="acoes">
+                  @if (solicitadas.has(item.salaId)) {
+                    <span class="sutil">Pedido enviado</span>
+                  } @else {
+                    <button
+                      type="button"
+                      class="btn-sec btn-peq"
+                      [disabled]="enviandoId !== null"
+                      (click)="solicitar(item, c)">
+                      {{ enviandoId === item.salaId ? 'Enviando...' : 'Solicitar' }}
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+}

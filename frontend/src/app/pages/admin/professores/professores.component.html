@@ -1,0 +1,45 @@
+<h2>Cadastrar professor</h2>
+<p class="sutil">O professor usa o login e a senha definidos aqui para entrar no sistema.</p>
+
+@if (erro) {
+  <p class="msg erro">{{ erro }}</p>
+}
+@if (aviso) {
+  <p class="msg ok">{{ aviso }}</p>
+}
+
+<form class="cartao" (ngSubmit)="cadastrar()">
+  <div class="grade-form">
+    <label>
+      Nome
+      <input name="nome" [(ngModel)]="form.nome">
+    </label>
+    <label>
+      CPF
+      <input name="cpf" [(ngModel)]="form.cpf" placeholder="Somente números" maxlength="14">
+    </label>
+    <label>
+      Disciplina
+      <input name="disciplina" [(ngModel)]="form.disciplina">
+    </label>
+    <label>
+      Tipo de aula
+      <select name="tipoAula" [(ngModel)]="form.tipoAula">
+        <option value="TEORICA">Teórica</option>
+        <option value="PRATICA">Prática</option>
+      </select>
+    </label>
+    <label>
+      Login
+      <input name="login" [(ngModel)]="form.login" autocomplete="off">
+    </label>
+    <label>
+      Senha
+      <input name="senha" type="password" [(ngModel)]="form.senha" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+    </label>
+  </div>
+
+  <button class="btn" type="submit" [disabled]="salvando">
+    {{ salvando ? 'Salvando...' : 'Cadastrar' }}
+  </button>
+</form>

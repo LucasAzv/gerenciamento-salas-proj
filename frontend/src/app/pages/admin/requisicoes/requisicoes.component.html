@@ -1,0 +1,61 @@
+<h2>Pedidos de reserva</h2>
+<p class="sutil">Aprove ou rejeite os pedidos feitos pelos professores.</p>
+
+<div class="cartao filtros">
+  <label>
+    Mostrar
+    <select name="filtro" [(ngModel)]="filtro" (ngModelChange)="carregar()">
+      <option value="PENDENTE">Pendentes</option>
+      <option value="APROVADA">Aprovados</option>
+      <option value="REJEITADA">Rejeitados</option>
+      <option value="CANCELADA">Cancelados</option>
+      <option value="">Todos</option>
+    </select>
+  </label>
+</div>
+
+@if (erro) {
+  <p class="msg erro">{{ erro }}</p>
+}
+
+<div class="cartao">
+  @if (carregando) {
+    <p class="sutil">Carregando...</p>
+  } @else {
+    <div class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Professor</th>
+            <th>Sala</th>
+            <th>Data</th>
+            <th>Horário</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of requisicoes; track r.id) {
+            <tr>
+              <td>#{{ r.id }}</td>
+              <td>Professor {{ r.professorId }}</td>
+              <td>Sala {{ r.salaId }}</td>
+              <td>{{ r.data | dataBr }}</td>
+              <td>{{ r.horaInicio | hora }} - {{ r.horaFim | hora }}</td>
+              <td><span class="etiqueta" [class]="r.status | lowercase">{{ r.status | status }}</span></td>
+              <td class="acoes">
+                @if (r.status === 'PENDENTE') {
+                  <button type="button" class="btn-link" [disabled]="processandoId !== null" (click)="aprovar(r)">Aprovar</button>
+                  <button type="button" class="btn-link perigo" [disabled]="processandoId !== null" (click)="rejeitar(r)">Rejeitar</button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="7" class="vazio">Nenhum pedido encontrado.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
