@@ -5,8 +5,8 @@ CREATE TABLE usuarios (
     senha VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL,
 
-    CONSTRAINT chk_role
-        CHECK (role IN ('ADMIN', 'PROFESSOR'))
+        CONSTRAINT chk_role
+            CHECK (role IN('ADMIN', 'PROFESSOR'))
 );
 
 
