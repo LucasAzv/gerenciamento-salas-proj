@@ -42,19 +42,19 @@ public class RecomendacaoIaService {
 
     public Resultado recomendar(String login, Pedido pedido) {
 
-        // 1. Identificar o professor autenticado
+        
         var professor = professores.findByUsuarioLogin(login)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.FORBIDDEN,
                         "Professor não associado ao usuário"
                 ));
 
-        // 2. Obter o tipo de aula cadastrado
+        
         TipoSala tipo = TipoSala.valueOf(
                 professor.getTipoAula().name()
         );
 
-        // 3. Consultar salas livres e compatíveis
+        
         List<SalaView> elegiveis = salaService.consultar(
                         pedido.data(),
                         pedido.horaInicio(),
@@ -70,7 +70,7 @@ public class RecomendacaoIaService {
                 )
                 .toList();
 
-        // 4. Retornar lista vazia caso não existam opções
+        
         if (elegiveis.isEmpty()) {
             return new Resultado(
                     professor.getDisciplina(),
@@ -80,7 +80,7 @@ public class RecomendacaoIaService {
             );
         }
 
-        // 5. Verificar configuração da API
+        
         if (apiKey.isBlank()
                 || apiKey.equals("CHAVE_NAO_CONFIGURADA")) {
 
@@ -90,7 +90,7 @@ public class RecomendacaoIaService {
             );
         }
 
-        // 6. Preparar os dados para a IA
+        
         StringBuilder dados = new StringBuilder()
                 .append("Disciplina: ")
                 .append(professor.getDisciplina())
@@ -118,7 +118,7 @@ public class RecomendacaoIaService {
                     .append('\n');
         }
 
-        // 7. Solicitar recomendação
+        
         RespostaModelo resposta;
 
         try {
@@ -171,7 +171,7 @@ public class RecomendacaoIaService {
 
         } catch (Exception e) {
 
-            // Análise via console
+            
             e.printStackTrace();
 
             throw new ResponseStatusException(
@@ -181,7 +181,7 @@ public class RecomendacaoIaService {
             );
         }
 
-        // 8. Validar resposta do modelo
+        
         if (resposta == null
                 || resposta.recomendacoes() == null) {
 
@@ -201,7 +201,7 @@ public class RecomendacaoIaService {
         Set<Long> vistos = new HashSet<>();
         List<SalaRecomendada> recomendadas = new ArrayList<>();
 
-// Adicionar as recomendações retornadas pela IA
+
         for (ItemModelo item : resposta.recomendacoes()) {
 
             if (item == null || item.salaId() == null) {
@@ -233,7 +233,7 @@ public class RecomendacaoIaService {
             ));
         }
 
-// Incluir salas que a IA deixou de recomendar
+
         for (SalaView sala : elegiveis) {
 
             if (vistos.add(sala.id())) {
@@ -259,7 +259,7 @@ public class RecomendacaoIaService {
             );
         }
 
-        // 10. Retornar as recomendações
+        
         return new Resultado(
                 professor.getDisciplina(),
                 tipo,
