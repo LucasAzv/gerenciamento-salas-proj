@@ -32,10 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
-                // O parser valida a assinatura e a expiração antes de retornar o login.
+               
                 String login = jwtService.extrairUsername(header.substring(7));
                 var user = userDetailsService.loadUserByUsername(login);
-                // As permissões atuais vêm do banco.
+                
                 var auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext().setAuthentication(auth);
