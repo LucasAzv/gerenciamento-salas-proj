@@ -24,7 +24,7 @@ public interface RequisicaoRepository extends JpaRepository<Requisicao, Long> {
 
     boolean existsBySalaId(Long salaId);
 
-    // Verifica conflitos com reservas aprovadas
+    
     @Query("""
             SELECT (COUNT(r) > 0)
             FROM Requisicao r
@@ -44,7 +44,7 @@ public interface RequisicaoRepository extends JpaRepository<Requisicao, Long> {
             @Param("ignorarId") Long ignorarId
     );
 
-    // Verifica solicitações duplicadas do mesmo professor
+   
     @Query("""
             SELECT (COUNT(r) > 0)
             FROM Requisicao r
